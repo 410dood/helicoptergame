@@ -1,38 +1,285 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
+/* global constants */
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var mouseDown = 0;
+
+var initialAscentRate = 1.0;
+var initialDescentRate = 1.5; // in pixels per frame
+var gravity = .08  // how quickly the descent rate increases
+var liftFactor = .04; // how quickly the climb rate increases
+var terminalVelocity = 5; // descent and ascent rate will never exceed this
+
+var chopperHeight = 26;
+var chopperWidth = 77;
+var chopper = new Image();
+chopper.src = "chopper.png"
+
+var backgroundHeight = 350;
+var backgroundWidth = 702;
+var backgroundV = 2; // background scroll velocity
+var background = new Image();
+background.src = "bg.jpg"
 
 
-$(document).ready(function () {
+/* variables that will be reset every time setup is called: */
+var chopperX;
+var chopperY;
+var scrollVal;
+var ascentRate;
+var descentRate;
+
+
+window.onload = function () { setup(); }
+    function setup() {
+        gameState = "pause";
+        clearScreen();
+        chopper.src = "chopper.png";
+        chopperX = 100;
+        chopperY = 175;
+        descentRate = initialDescentRate;
+        ascentRate = initialAscentRate;
+        ctx.drawImage(background, 0, 0, backgroundWidth, backgroundHeight);
+        ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
+    }
+
+    function play() {
+        if (gameState == "pause") {
+            intervalId = window.requestAnimationFrame(draw, canvas); 
+            gameState = "play";
+        }
+    }
+
+    function pause() {
+        if (gameState == "play") {
+            gameState = "pause";
+        }
+    }
+
+    function stop() {
+        gameState = "stop"
+    }
+
+    function draw() {
+        if (gameState == "play") {
+            clearScreen();
+            animateChopper();
+            window.requestAnimationFrame(draw, canvas);
+        }
+}
+
+// function drawCrash() {
+//     chopper.src = "chopper_burn.png";
+//     ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
+//     ctx.font = "40 Bold Verdana"
+
+//     ctx.fillText("YOU LOSE!", 240, 80);
+// }
+
+function animateChopper() {
+    if (mouseDown) {
+        descentRate = initialDescentRate;
+        chopperY = chopperY - ascentRate;
+
+        if (!(ascentRate > terminalVelocity)) {
+            ascentRate += liftFactor;
+        }
+    } else {
+        ascentRate = initialAscentRate;
+        chopperY = chopperY + descentRate;
+
+        if (!(descentRate > terminalVelocity)) {
+            descentRate += gravity;
+        }
+    }
+
+    ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
+
+}
+
+/* Heads up - if this function is just named clear(), onclick fails silently! */
+function clearScreen() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+
+/* This is a nifty trick! */
+document.body.onmousedown = function () {
+    if (!(mouseDown == 1)) {
+        ++mouseDown;
+    }
+}
+document.body.onmouseup = function () {
+    if (mouseDown > 0) {
+        --mouseDown;
+    }
+    if (gameState == "pause") {
+        play();
+    }
+}
+
+document.body.onkeypress = function (e) {
+    if (e.keyCode == 32) { // spacebar
+        if (gameState == "pause") {
+            play();
+        } else {
+            pause();
+        }
+    }
+    if (e.keyCode == 114) {
+        if (gameState != "play") {
+            setup()
+        }
+    }
+}
+
+
+if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = (function () {
+        return window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function ( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+    })();
+}
+
+// $(document).ready(function () {
     //Play button
     //   $("#Play").click(function () {
      //  });
 
   //create a buttload of variables 
     
-    var heliX
-    var heliY
-    var heliWidth = 20
-    var heliHeight = 25
+    // var heliX
+    // var heliY
+    // var heliWidth = 20
+    // var heliHeight = 25
   
-    var bombArr = [];
-    var bombHeight = 60;
-    var bombWidth = 30;
-    var bombColor = "red";
-    var bombV = 0.5
+    // var bombArr = [];
+    // var bombHeight = 60;
+    // var bombWidth = 30;
+    // var bombColor = "red";
+    // var bombV = 0.5
 
-    var backgroundHeight = 300;
-    var backgroundWidth = 400;
-    var background = new Image();
-    background.src = "pic2.jpg"
-    var a = new Image();
-    a.src = "heli.png";
+// ----------------------------
+// ----------------------------
+// ----------------------------
+// ----------------------------
+
+// window.onload = function () { setup(); }
+
+// function setup() {
+//     gameState = "pause";
+//     clearScreen();
+
+//     chopper.src = "chopper.png";
+
+//     brickList = new Array();
+//     smokeList = new Array();
+
+//     chopperX = 100;
+//     chopperY = 175;
+
+
+
+//     iterationCount = 0;
+//     score = 0;
+
+//     scrollVal = 0;
+
+//     ctx.font = font;
+
+//     addBrick();
+
+//     ctx.drawImage(background, 0, 0, backgroundWidth, backgroundHeight);
+//     ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
+
+//     ctx.fillStyle = textColor;
+//     ctx.fillText('Press spacebar to play/pause', 10, 340);
+// }
+
+
+// var player = { x: 150, y: 250, size: 50 };
+// var gravity = 1;
+// var goUp = false;
+
+
+// var start = function () {
+//   //  background(0, 0, 0);
+//       // ctx.fillRect(50, x, 90, 25);
+//     drawPlayer();
+//     movePlayer();
+//     ctx.drawImage(background, canvas.width, 0, backgroundWidth, backgroundHeight);
+// };
+
+// var drawPlayer = function () {
+//     ctx.fillRect(player.x, player.y, player.size, player.size);
+// }
+
+// var movePlayer = function () {
+//     if (goUp) {
+//         gravity -= 0.4;
+//     } else {
+//         gravity += 0.4;
+//     }
+//     heli.y += gravity;
+// }
+
+// var goUp = false;
+// var mousePressed = function () {
+//     if (mouseButton === LEFT) {
+//         goUp = true;
+//     }
+// };
+// var mouseReleased = function () {
+//     if (mouseButton === LEFT) {
+//         goUp = false;
+//     }
+// };
+
+// function animateChopper() {
+//     if (mouseDown) {
+//         descentRate = initialDescentRate;
+//         chopperY = chopperY - ascentRate;
+
+//         if (!(ascentRate > terminalVelocity)) {
+//             ascentRate += liftFactor;
+//         }
+//     } else {
+//         ascentRate = initialAscentRate;
+//         chopperY = chopperY + descentRate;
+
+//         if (!(descentRate > terminalVelocity)) {
+//             descentRate += gravity;
+//         }
+//     }
+
+//     // border detection
+//     if ((chopperY < 0) || (chopperY > (canvas.height - chopperHeight))) {
+//         gameOver();
+//     }
+
+//     ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
+
+
+
+    // $("#bomb").click(function () {
+    // start();
+    //  });
+
+
+
 
 
     // window.onload = function () {
     // var canvas = document.getElementById('canvas');
     // var ctx = canvas.getContext('2d');
-    //     // ctx.drawImage(background, 0, 0, backgroundWidth, backgroundHeight);
+    //    ctx.drawImage(background, 0, 0, backgroundWidth, backgroundHeight);
     //     ctx.drawImage(a, 50, 30, heliWidth, heliHeight);
  
     // ctx.fillStyle = '#212121';
@@ -96,148 +343,148 @@ $(document).ready(function () {
         // ctx.drawImage(heli, heliX, heliY, heliWidth, heliHeight);
 
 
-// // ----------heli movement ----EXPAND below-----------------------
-//     var canvas = document.getElementById('canvas');
-//     var ctx = canvas.getContext('2d');
-//         x = 10, 
-//         y = 10, 
-//         width = 20, 
-//         height = 20; 
+// ----------heli movement ----EXPAND below-----------------------
+    // var canvas = document.getElementById('canvas');
+    // var ctx = canvas.getContext('2d');
+    //     x = 10, 
+    //     y = 10, 
+    //     width = 20, 
+    //     height = 20; 
 	
-//     function drawRect(x, y, width, height) {
-//         ctx.fillStyle = '#666'; 
-//         ctx.fillRect(x, y, width, height); 
+    // function drawRect(x, y, width, height) {
+    //     ctx.fillStyle = '#666'; 
+    //     ctx.fillRect(x, y, width, height); 
 
-//         heli.src = "heli.png";
+    //     heli.src = "heli.png";
 
-//     }
+    // }
 
-//     drawRect(x, y, width, height); 
+    // drawRect(x, y, width, height); 
 
-//     window.onkeydown = function (event) {
-//         var keydown = event.keyCode; 
+    // window.onkeydown = function (event) {
+    //     var keydown = event.keyCode; 
 
-//         if (keydown === 39 && x <= 460) {
-//             x = x + 20; //move 20 pixels
-//         }
-//         else if (keydown === 37 && x > 10) {
-//             x = x - 20;
-//         }
-//         else if (keydown === 38 && y > 10) {
-//             y = y - 20; 
-//         }
-//         else if (keydown === 40 && y <= 460) {
-//             y = y + 20; 
-//         }
+    //     if (keydown === 39 && x <= 460) {
+    //         x = x + 20; //move 20 pixels
+    //     }
+    //     else if (keydown === 37 && x > 10) {
+    //         x = x - 20;
+    //     }
+    //     else if (keydown === 38 && y > 10) {
+    //         y = y - 20; 
+    //     }
+    //     else if (keydown === 40 && y <= 460) {
+    //         y = y + 20; 
+    //     }
 
-//         ctx.clearRect(0, 0, 500, 500);
+    //     ctx.clearRect(0, 0, 500, 500);
 
 
-//         drawRect(x, y, width, height);
-//     };
+    //     drawRect(x, y, width, height);
+    // };
 // // ----------heli movement -----EXPAND above------------------------------
 
 
 
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-var x = canvas.width;
-var y = Math.floor(Math.random() * (canvas.height))
+// var canvas = document.getElementById("canvas");
+// var ctx = canvas.getContext("2d");
+// var x = canvas.width;
+// var y = Math.floor(Math.random() * (canvas.height))
 
-    function drawBall() {
-        ctx.rect(50, 100, 25, 60);
-        ctx.fillStyle = "red";
-        ctx.fill();
-    }
+//     function drawBall() {
+//         ctx.rect(50, 100, 25, 60);
+//         ctx.fillStyle = "red";
+//         ctx.fill();
+//     }
 
-    function draw() {
-        console.log("drawball")
-        ctx.clearRect(x, 100, canvas.width, canvas.height);
-        drawBall();
-        x += -1;
-    }
+//     function draw() {
+//         console.log("drawball")
+//         ctx.clearRect(x, 100, canvas.width, canvas.height);
+//         drawBall();
+//         x += -1;
+//     }
     
-    setInterval(draw, 20);
-    setInterval(drawball, 20);
+//     setInterval(draw, 20);
+//     setInterval(drawball, 20);
 
 
-    $("#bomb").click(function () {
-        setInterval(function () { drawball(); }, 10);
-    });
+//     $("#bomb").click(function () {
+//         setInterval(function () { drawball(); }, 10);
+//     });
 
 
-// figure out how to get this shit into an array 
-    function addBomb() {
-        console.log("bombworking")
-        newBomb = {}
-        newBomb.x = canvas.width;
-        newBomb.y = Math.floor(Math.random() * (canvas.height - bombHeight))
-        bombArr.push(newBomb);
-        console.log(newBomb)
-    }
-        console.log(newBomb)
+// // figure out how to get this shit into an array 
+//     function addBomb() {
+//         console.log("bombworking")
+//         newBomb = {}
+//         newBomb.x = canvas.width;
+//         newBomb.y = Math.floor(Math.random() * (canvas.height - bombHeight))
+//         bombArr.push(newBomb);
+//         console.log(newBomb)
+//     }
+//         console.log(newBomb)
 
 
-    function clearScreen() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-    window.requestAnimationFrame(draw, canvas);
+//     function clearScreen() {
+//         ctx.clearRect(0, 0, canvas.width, canvas.height);
+//     }
+//     window.requestAnimationFrame(draw, canvas);
 
-    //dont delete this closing tag
+//     //dont delete this closing tag
 
-    var vendors = ['webkit', 'moz'];
-    for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
-        window.requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame'];
-    }
+    // var vendors = ['webkit', 'moz'];
+    // for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+    //     window.requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
+    //     window.cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame'];
+    // }
 
-    var canvas = document.getElementById('canvas'),
-        cw = canvas.width,
-        ch = canvas.height,
-        cx = null,
-        fps = 30,
-        bX = 30,
-        bY = Math.floor(Math.random() * (canvas.height - bombHeight)),
-        mX = 50,
-        mY = 10,
-        lastTime = (new Date()).getTime(),
-        currentTime = 0,
-        delta = 0;
+    // var canvas = document.getElementById('canvas'),
+    //     cw = canvas.width,
+    //     ch = canvas.height,
+    //     cx = null,
+    //     fps = 30,
+    //     bX = 30,
+    //     bY = Math.floor(Math.random() * (canvas.height - bombHeight)),
+    //     mX = 50,
+    //     mY = 10,
+    //     lastTime = (new Date()).getTime(),
+    //     currentTime = 0,
+    //     delta = 0;
 
-    function gameLoop() {
-        window.requestAnimationFrame(gameLoop);
+    // function gameLoop() {
+    //     window.requestAnimationFrame(gameLoop);
 
-        currentTime = (new Date()).getTime();
-        delta = (currentTime - lastTime) / 1000;
-        cx.clearRect(0, 0, cw, cw);
+    //     currentTime = (new Date()).getTime();
+    //     delta = (currentTime - lastTime) / 1000;
+    //     cx.clearRect(0, 0, cw, cw);
 
-        cx.beginPath();
-        cx.fillStyle = 'red';
-        cx.rect(bX, bY, 25, 60);
-        cx.fill();
-        if (bX >= cw || bX <= 0) {
-            mX + 1;
-        }
-        // if (bY >= ch || bY <= 0) {
-        //     mY *= -1;
-        // }
+    //     cx.beginPath();
+    //     cx.fillStyle = 'red';
+    //     cx.rect(bX, bY, 25, 60);
+    //     cx.fill();
+    //     if (bX >= cw || bX <= 0) {
+    //         mX + 1;
+    //     }
+    //     // if (bY >= ch || bY <= 0) {
+    //     //     mY *= -1;
+    //     // }
 
-        //bX += (mX * delta);
-        //bY += (mY * delta);
+    //     //bX += (mX * delta);
+    //     //bY += (mY * delta);
 
-        lastTime = currentTime;
+    //    lastTime = currentTime;
 
 
     
-    }
+    // }
 
-    if (typeof (canvas.getContext) !== undefined) {
-        cx = canvas.getContext('2d');
+    // if (typeof (canvas.getContext) !== undefined) {
+    //     cx = canvas.getContext('2d');
 
-        gameLoop();
-    }
-
-
+    //     gameLoop();
+    // }
 
 
-});
+
+
+//});
