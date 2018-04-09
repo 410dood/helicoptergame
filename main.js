@@ -25,41 +25,40 @@ $(document).ready(function () {
     var backgroundWidth = 400;
     var background = new Image();
     background.src = "pic2.jpg"
-    var heli = new Image();
-    heli.src = "heli.png";
-
-//   window.onload = function () {
+    var a = new Image();
+    a.src = "heli.png";
 
 
-    var canvas = document.getElementById('canvas');
-    var ctx = canvas.getContext('2d');
-        // ctx.drawImage(background, 0, 0, backgroundWidth, backgroundHeight);
-        // ctx.drawImage(heli, 10, 30, heliWidth, heliHeight);
-
-    ctx.fillStyle = '#212121';
-    // A variable to store the requestID.
-    var requestID;
-    // Variables to for the drawing position and object.
-    var posX = 50;
-    var boxWidth = 50;
-    var pixelsPerFrame = 5; // How many pixels the box should move per frame.
-    // Draw the initial box on the canvas.
-    ctx.fillRect(posX, 0, 90, 25);
-    // Animate.
-    function animate() {
-        requestID = requestAnimationFrame(animate);
-
+    // window.onload = function () {
+    // var canvas = document.getElementById('canvas');
+    // var ctx = canvas.getContext('2d');
+    //     // ctx.drawImage(background, 0, 0, backgroundWidth, backgroundHeight);
+    //     ctx.drawImage(a, 50, 30, heliWidth, heliHeight);
+ 
+    // ctx.fillStyle = '#212121';
+    // // A variable to store the requestID.
+    // var requestID;
+    // // Variables to for the drawing position and object.
+    // var posX = 50;
+    // var boxWidth = 50;
+    // var pixelsPerFrame = 5; // How many pixels the box should move per frame.
+    // // Draw the initial box on the canvas.
+    // ctx.fillRect(50, x, 90, 25);
+    // // Animate.
+    // function animate() {
+    //     requestID = requestAnimationFrame(animate);
+    // }
         // If the box has not reached the end draw on the canvas.
         // Otherwise stop the animation.
-        if (posX <= (canvas.width - boxWidth)) {
-            ctx.clearRect((posX - pixelsPerFrame), 0, boxWidth, canvas.height);
-            ctx.fillRect(posX, 0, boxWidth, canvas.height);
-            posX += pixelsPerFrame;
-        } else {
-            cancelAnimationFrame(requestID);
-        }
-    }
-
+    //     if (posX <= (canvas.width - boxWidth)) {
+    //         ctx.clearRect((posX - pixelsPerFrame), 0, boxWidth, canvas.height);
+    //         ctx.fillRect(posX, 0, boxWidth, canvas.height);
+    //         posX += pixelsPerFrame;
+    //     } else {
+    //         cancelAnimationFrame(requestID);
+    //     }
+    // }
+    // }
 
 //do controls for helicopter
 
@@ -113,10 +112,6 @@ $(document).ready(function () {
 
 //     }
 
-
-
-
-
 //     drawRect(x, y, width, height); 
 
 //     window.onkeydown = function (event) {
@@ -144,49 +139,105 @@ $(document).ready(function () {
 
 
 
-// var canvas = document.getElementById("canvas");
-// var ctx = canvas.getContext("2d");
-// var x = canvas.width;
-// var y = Math.floor(Math.random() * (canvas.height))
-// var rextX_0 = canvas.width;
-// var rectY_0 = Math.floor(Math.random() * (canvas.height))
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var x = canvas.width;
+var y = Math.floor(Math.random() * (canvas.height))
 
-// function drawBall() {
-//     ctx.beginPath();
-//     ctx.arc(x, y, 30, 0, Math.PI * 2);
-//     ctx.rect(x, y, 25, 60);
-//     ctx.rect(rextX_0, y, 90, 25);
-//     ctx.fillStyle = "#0095DD";
-//     ctx.fill();
-//     ctx.closePath();
-// }
+    function drawBall() {
+        ctx.rect(50, 100, 25, 60);
+        ctx.fillStyle = "red";
+        ctx.fill();
+    }
 
-// function draw() {
-//     console.log("drawball")
-//     ctx.clearRect(0, 0, canvas.width, canvas.height);
-//     drawBall();
-//     x += -1;
-
-// }
-// setInterval(draw, 3000);
-
-//     $("#bomb").click(function () {
-//         setInterval(function () { drawball(); }, 10);
-//     });
+    function draw() {
+        console.log("drawball")
+        ctx.clearRect(x, 100, canvas.width, canvas.height);
+        drawBall();
+        x += -1;
+    }
+    
+    setInterval(draw, 20);
+    setInterval(drawball, 20);
 
 
+    $("#bomb").click(function () {
+        setInterval(function () { drawball(); }, 10);
+    });
 
 
-// // figure out how to get this shit into an array 
-// function addBomb() {
-//     console.log("bombworking")
-//     newBomb = {}
-//     newBomb.x = canvas.width;
-//     newBomb.y = Math.floor(Math.random() * (canvas.height - bombHeight))
-//     bombArr.push(newBomb);
-//     console.log(newBomb)
-// }
+// figure out how to get this shit into an array 
+    function addBomb() {
+        console.log("bombworking")
+        newBomb = {}
+        newBomb.x = canvas.width;
+        newBomb.y = Math.floor(Math.random() * (canvas.height - bombHeight))
+        bombArr.push(newBomb);
+        console.log(newBomb)
+    }
+        console.log(newBomb)
 
+
+    function clearScreen() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    window.requestAnimationFrame(draw, canvas);
 
     //dont delete this closing tag
+
+    var vendors = ['webkit', 'moz'];
+    for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+        window.requestAnimationFrame = window[vendors[i] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame'];
+    }
+
+    var canvas = document.getElementById('canvas'),
+        cw = canvas.width,
+        ch = canvas.height,
+        cx = null,
+        fps = 30,
+        bX = 30,
+        bY = Math.floor(Math.random() * (canvas.height - bombHeight)),
+        mX = 50,
+        mY = 10,
+        lastTime = (new Date()).getTime(),
+        currentTime = 0,
+        delta = 0;
+
+    function gameLoop() {
+        window.requestAnimationFrame(gameLoop);
+
+        currentTime = (new Date()).getTime();
+        delta = (currentTime - lastTime) / 1000;
+        cx.clearRect(0, 0, cw, cw);
+
+        cx.beginPath();
+        cx.fillStyle = 'red';
+        cx.rect(bX, bY, 25, 60);
+        cx.fill();
+        if (bX >= cw || bX <= 0) {
+            mX + 1;
+        }
+        // if (bY >= ch || bY <= 0) {
+        //     mY *= -1;
+        // }
+
+        //bX += (mX * delta);
+        //bY += (mY * delta);
+
+        lastTime = currentTime;
+
+
+    
+    }
+
+    if (typeof (canvas.getContext) !== undefined) {
+        cx = canvas.getContext('2d');
+
+        gameLoop();
+    }
+
+
+
+
 });
