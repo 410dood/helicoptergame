@@ -51,12 +51,7 @@ window.onload = function () { setup(); }
         ctx.drawImage(background, 0, 0, backgroundWidth, backgroundHeight);
         ctx.drawImage(heli, heliX, heliY, heliWidth, heliHeight);
     }
-    function drawWalls() {
-        
-    }
-    var moveWalls = function() {
-        for ()
-    }
+
 
     function play() {
         if (gameState == "pause") {
