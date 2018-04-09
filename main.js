@@ -1,6 +1,13 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
+// ---------
+var gap = {height: 300, y: 250};
+var walls = {};
+
+// --------
+
+
 /* global constants */
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -12,10 +19,10 @@ var gravity = .08  // how quickly the descent rate increases
 var liftFactor = .04; // how quickly the climb rate increases
 var terminalVelocity = 5; // descent and ascent rate will never exceed this
 
-var chopperHeight = 26;
-var chopperWidth = 77;
-var chopper = new Image();
-chopper.src = "chopper.png"
+var heliHeight = 26;
+var heliWidth = 77;
+var heli = new Image();
+heli.src = "heli.png"
 
 var backgroundHeight = 350;
 var backgroundWidth = 702;
@@ -25,8 +32,8 @@ background.src = "bg.jpg"
 
 
 /* variables that will be reset every time setup is called: */
-var chopperX;
-var chopperY;
+var heliX;
+var heliY;
 var scrollVal;
 var ascentRate;
 var descentRate;
@@ -36,13 +43,19 @@ window.onload = function () { setup(); }
     function setup() {
         gameState = "pause";
         clearScreen();
-        chopper.src = "chopper.png";
-        chopperX = 100;
-        chopperY = 175;
+        heli.src = "heli.png";
+        heliX = 100;
+        heliY = 175;
         descentRate = initialDescentRate;
         ascentRate = initialAscentRate;
         ctx.drawImage(background, 0, 0, backgroundWidth, backgroundHeight);
-        ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
+        ctx.drawImage(heli, heliX, heliY, heliWidth, heliHeight);
+    }
+    function drawWalls() {
+        
+    }
+    var moveWalls = function() {
+        for ()
     }
 
     function play() {
@@ -65,37 +78,29 @@ window.onload = function () { setup(); }
     function draw() {
         if (gameState == "play") {
             clearScreen();
-            animateChopper();
+            animateheli();
             window.requestAnimationFrame(draw, canvas);
         }
 }
 
-// function drawCrash() {
-//     chopper.src = "chopper_burn.png";
-//     ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
-//     ctx.font = "40 Bold Verdana"
-
-//     ctx.fillText("YOU LOSE!", 240, 80);
-// }
-
-function animateChopper() {
+function animateheli() {
     if (mouseDown) {
         descentRate = initialDescentRate;
-        chopperY = chopperY - ascentRate;
+        heliY = heliY - ascentRate;
 
         if (!(ascentRate > terminalVelocity)) {
             ascentRate += liftFactor;
         }
     } else {
         ascentRate = initialAscentRate;
-        chopperY = chopperY + descentRate;
+        heliY = heliY + descentRate;
 
         if (!(descentRate > terminalVelocity)) {
             descentRate += gravity;
         }
     }
 
-    ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
+    ctx.drawImage(heli, heliX, heliY, heliWidth, heliHeight);
 
 }
 
@@ -104,8 +109,6 @@ function clearScreen() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-
-/* This is a nifty trick! */
 document.body.onmousedown = function () {
     if (!(mouseDown == 1)) {
         ++mouseDown;
@@ -135,7 +138,7 @@ document.body.onkeypress = function (e) {
     }
 }
 
-
+//cross browser compatability code
 if (!window.requestAnimationFrame) {
     window.requestAnimationFrame = (function () {
         return window.webkitRequestAnimationFrame ||
@@ -177,13 +180,13 @@ if (!window.requestAnimationFrame) {
 //     gameState = "pause";
 //     clearScreen();
 
-//     chopper.src = "chopper.png";
+//     heli.src = "heli.png";
 
 //     brickList = new Array();
 //     smokeList = new Array();
 
-//     chopperX = 100;
-//     chopperY = 175;
+//     heliX = 100;
+//     heliY = 175;
 
 
 
@@ -197,7 +200,7 @@ if (!window.requestAnimationFrame) {
 //     addBrick();
 
 //     ctx.drawImage(background, 0, 0, backgroundWidth, backgroundHeight);
-//     ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
+//     ctx.drawImage(heli, heliX, heliY, heliWidth, heliHeight);
 
 //     ctx.fillStyle = textColor;
 //     ctx.fillText('Press spacebar to play/pause', 10, 340);
@@ -242,17 +245,17 @@ if (!window.requestAnimationFrame) {
 //     }
 // };
 
-// function animateChopper() {
+// function animateheli() {
 //     if (mouseDown) {
 //         descentRate = initialDescentRate;
-//         chopperY = chopperY - ascentRate;
+//         heliY = heliY - ascentRate;
 
 //         if (!(ascentRate > terminalVelocity)) {
 //             ascentRate += liftFactor;
 //         }
 //     } else {
 //         ascentRate = initialAscentRate;
-//         chopperY = chopperY + descentRate;
+//         heliY = heliY + descentRate;
 
 //         if (!(descentRate > terminalVelocity)) {
 //             descentRate += gravity;
@@ -260,11 +263,11 @@ if (!window.requestAnimationFrame) {
 //     }
 
 //     // border detection
-//     if ((chopperY < 0) || (chopperY > (canvas.height - chopperHeight))) {
+//     if ((heliY < 0) || (heliY > (canvas.height - heliHeight))) {
 //         gameOver();
 //     }
 
-//     ctx.drawImage(chopper, chopperX, chopperY, chopperWidth, chopperHeight);
+//     ctx.drawImage(heli, heliX, heliY, heliWidth, heliHeight);
 
 
 
@@ -309,7 +312,7 @@ if (!window.requestAnimationFrame) {
 
 //do controls for helicopter
 
-//chopper movement on canvas
+//heli movement on canvas
 
 //figure out how to create the obstacles --- prob something with math.random
 
