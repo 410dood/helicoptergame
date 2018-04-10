@@ -124,7 +124,7 @@ var drawPlayer = function () {
   // fill(0, 0, 255);
  //   image(gif, 90, 80);
   //  ellipse(player.x, player.y, player.size, player.size);
-    image(snowboarder1, player.x, player.y, player.size, player.size);
+    image(snowboarder1, player.x, player.y, windowHeight / 10, windowHeight / 10);
    // image(img, 0, height / 2, img.width / 2, img.height / 2);
 
 }
@@ -166,13 +166,13 @@ var mouseReleased = function() {
 };
 var youLoseScreen = function() {
     fill(255); 
-    textSize(24);
-    text("Game Over", 200, 200);
-    text("click to restart", 180, 350);
+    textSize(windowHeight / 12);
+    text("Game Over", windowWidth * 0.4, windowHeight * 0.4);
+    text("Click to Restart", windowWidth * 0.36, windowHeight * 0.6);
 };
 var drawScore = function() {
     fill(255, 255, 0);
     textSize(24);
-    text(score, 50, 450);
+    text(score, 50, windowHeight * 0.9);
 };
 
