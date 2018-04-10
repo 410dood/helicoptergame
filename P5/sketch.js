@@ -18,22 +18,23 @@ var walls = [];
 var wallTimer = 0;
 
 var draw = function() {
+    noStroke();
     background(0, 0, 0);
     drawPlayer();
     drawWalls();
     drawScore();
 
     if (crashed === false) {
-       movePlayer();
-     //   doCoin();
+        movePlayer();
+        doCoin();
         moveWalls();
-    } else { 
+    }   else { 
         youLoseScreen();
-    }
+        }
 };
 var drawWalls = function () {
     for (var wall of walls) {
-    fill(255, 255, 0);
+    fill("green");
     rect(wall.x, wall.y, wall.w, wall.h)
 }
 };
@@ -41,33 +42,32 @@ var moveWalls = function () {
     for (var wall of walls) {
         wall.x -= 3;
     
-        // if wall.x < player.x && wall.x + wall.w > player.x) {
-        // }
-    
+     if (wall.x < player.x && wall.x + wall.w > player.x) {
+         if (player.y - player.size/2 < wall.y + wall.h && 
+        player.y + player.size/2 > wall.y) {
+        crashed = true;
+        }
     }
+}
     if (wallTimer <= 0) {
         wallTimer = 16;
+        gap.y += 25 * floor(random(2.66) - 1);
 
-        var topWall = { x: 500, y: 0, w: 50, h: gap.y - gap.height / 2};
-            walls.push(topWall);
-        var bottomWall = { x: 500, y: gap.y + 100, w: 50, h: gap.y - gap.height / 2 };
-            walls.push(bottomWall);
-
-        // $("topWall").css('transform', 'rotate(90deg) scaleX(-1)');
-            
-
-
+        var newWall = { x: 500, y: 0, w: 50, h: gap.y - gap.height/2 };
+        walls.push(newWall);
+        var newWall = { x: 500, y: gap.y + 100, w: 50, h: gap.y - gap.height/2 };
+        walls.push(newWall);
     }
     wallTimer -= 1;
-    gap.y += 25 * floor(random(2.99) - 1)
+};
 
-    if (gap.y < 175) {
-        gap.y = 175
+
+    if (gap.y < 150) {
+        gap.y = 150
     }
     if (gap.y > 350) {
         gap.y = 350;
-    }
- };
+    };
 
 var doCoin = function() {
     var filteredCoins = coins.filter((coin) => {return coin.x > 0 && !coin.collected});
@@ -82,8 +82,8 @@ var doCoin = function() {
         ellipse(coin.x, coin.y, coin.size, coin.size);
 
         coin.x -= 3;
-        var playerRadius = player.size / 2;
-        var coinRadius = coin.size / 2;
+        var playerRadius = player.size/2;
+        var coinRadius = coin.size/2;
         var touchDistance = playerRadius + coinRadius;
 
         if (dist(player.x, player.y, coin.x, coin.y) < touchDistance) {
@@ -119,15 +119,16 @@ if (player.y > 500 || player.y < 0) {
 var mousePressed = function() {
     if (mouseButton === LEFT) {
         goUp = true;
+        if (crashed) {
+            crashed = false;
+            player.y = 250;
+            gravity = 0;
+            score = 0;
+            coins = [];
+            walls = [];
+        }
     }
-    if (crashed) {
-        crashed = false;
-        player.y = 250;
-        gravity = 0;
-        score = 0;
-        coins = [];
-    }
-}
+};
 var mouseReleased = function() {
     if (mouseButton === LEFT) {
         goUp = false;
