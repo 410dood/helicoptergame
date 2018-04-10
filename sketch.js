@@ -11,22 +11,64 @@ var player = { x: 150, y: 250, size: 50 };
 var coins = [];
 var gravity = 0;
 var score = 0;
-
 var goUp = false;
 var crashed = false;
+var gap = {height: 350, y: 250};
+var walls = [];
+var wallTimer = 0;
 
 var draw = function() {
     background(0, 0, 0);
     drawPlayer();
+    drawWalls();
     drawScore();
 
     if (crashed === false) {
-        movePlayer();
-        doCoin();
+       movePlayer();
+     //   doCoin();
+        moveWalls();
     } else { 
         youLoseScreen();
     }
 };
+var drawWalls = function () {
+    for (var wall of walls) {
+    fill(255, 255, 0);
+    rect(wall.x, wall.y, wall.w, wall.h)
+}
+};
+var moveWalls = function () {
+    for (var wall of walls) {
+        wall.x -= 3;
+    
+        // if wall.x < player.x && wall.x + wall.w > player.x) {
+        // }
+    
+    }
+    if (wallTimer <= 0) {
+        wallTimer = 16;
+
+        var topWall = { x: 500, y: 0, w: 50, h: gap.y - gap.height / 2};
+            walls.push(topWall);
+        var bottomWall = { x: 500, y: gap.y + 100, w: 50, h: gap.y - gap.height / 2 };
+            walls.push(bottomWall);
+
+        // $("topWall").css('transform', 'rotate(90deg) scaleX(-1)');
+            
+
+
+    }
+    wallTimer -= 1;
+    gap.y += 25 * floor(random(2.99) - 1)
+
+    if (gap.y < 175) {
+        gap.y = 175
+    }
+    if (gap.y > 350) {
+        gap.y = 350;
+    }
+ };
+
 var doCoin = function() {
     var filteredCoins = coins.filter((coin) => {return coin.x > 0 && !coin.collected});
     coins = filteredCoins;
@@ -102,3 +144,4 @@ var drawScore = function() {
     textSize(24);
     text(score, 50, 450);
 };
+
