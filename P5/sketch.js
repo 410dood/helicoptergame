@@ -1,18 +1,22 @@
-
 var gif; 
 var img;
 var c;
 var createImg;
 var windowWidth;
 var windowHeight;
-var foo
-
+var foo;
+var width;
+width = windowWidth;
+height = windowHeight;
+var ramp, snowboarder1, snowboarder2, snowflake
 
 function preload() {
     // preload() runs once
     snowboarder2 = loadImage('snowboarder2.gif');
     snowboarder1 = loadImage('snowboarder1.gif');
-    pic2 = loadImage('pic2.jpg');
+    snowflake = loadImage('snowflake.png');
+    snow = loadImage('snow.jpg');
+    ramp = loadImage("ramp.png");
 
 }
 function setup() {
@@ -42,6 +46,8 @@ var wallTimer = 0;
 var speed = 9;
 var centerTextH = (windowWidth / 2);
 var centerTextH = (windowHeight / 2);
+ramp.position.x = windowWidth / 2;
+ramp.position.y = windowWidth / 2;
 
 
 var draw = function() {
@@ -61,8 +67,9 @@ var draw = function() {
 };
 var drawWalls = function () {
     for (var wall of walls) {
-    fill("gray");
-    rect(wall.x, wall.y, wall.w, wall.h)
+        image(snow, wall.x, wall.y, wall.w, wall.h)
+   // fill("gray");
+   // rect(snow,wall.x, wall.y, wall.w, wall.h)
 }
 };
 var moveWalls = function() {
@@ -87,28 +94,26 @@ var moveWalls = function() {
             gap.y = 350;
         };
 
-        var topWall = {x:windowWidth, y:0, w:150, h: gap.y - gap.height / 2};
+        var topWall = {x: windowWidth, y:0, w:150, h: gap.y - gap.height / 2};
         walls.push(topWall);
       //  topWall.mirrorY(-1);
-       var bottomWall = { x: windowWidth, y: gap.y+150, w: 150, h: gap.y - gap.height / 2};
-        walls.push(bottomWall);
+      // var bottomWall = { x: windowWidth, y:gap.y, w: 150, h: gap.y - gap.height / 2};
+      //  walls.push(bottomWall);
     }
     wallTimer -= speed;
 };
 
-
-
 var doCoin = function() {
     var filteredCoins = coins.filter((coin) => {return coin.x > 0 && !coin.collected});
     coins = filteredCoins;
-    if (random(0,100)< 3) {
+    if (random(0,100)< 50) {
         var newCoin = {x:windowWidth, y: random(0, windowWidth), size: 20, collected: false};
         coins.push(newCoin);
     }
     for (var coin of coins) {
-
-        fill(255,255,0);
-        ellipse(coin.x, coin.y, coin.size, coin.size);
+        image(snowflake, coin.x, coin.y, coin.size, coin.size); 
+     //   fill(255,255,0);
+     //   ellipse(coin.x, coin.y, coin.size, coin.size);
 
         coin.x -= speed;
         var playerRadius = player.size/2;
@@ -126,8 +131,8 @@ var doCoin = function() {
 var drawPlayer = function () {
   // fill(0, 0, 255);
  //   image(gif, 90, 80);
-  //  ellipse(player.x, player.y, player.size, player.size);
-    image(snowboarder1, player.x, player.y, windowHeight / 10, windowHeight / 10);
+    //ellipse(player.x, player.y, player.size, player.size);
+    image(snowboarder1, player.x-35, player.y-35, windowHeight / 10, windowHeight / 10);
    // image(img, 0, height / 2, img.width / 2, img.height / 2);
 
 }
@@ -178,4 +183,29 @@ var drawScore = function() {
     textSize(24);
     text(score, 50, windowHeight * 0.9);
 };
+function draw() {
+    ramps = new Group();
 
+
+//spawn ramps
+if (frameCount % 60 == 0) {
+    var rampH = random(50, 300);
+    var ramp = createSprite(ramp.position.x + width, GROUND_Y - rampH / 2 + 1 + 100, 80, rampH);
+    ramp.addImage(ramp);
+    ramps.add(ramp);
+
+    //top ramp
+    if (rampH < 200) {
+        rampH = height - (height - GROUND_Y) - (rampH + MIN_OPENING);
+        ramp = createSprite(ramp.position.x + width, rampH / 2 - 100, 80, rampH);
+        ramp.mirrorY(-1);
+        ramp.addImage(rampImg);
+        ramps.add(ramp);
+    }
+}
+
+//get rid of passed ramps
+for (var i = 0; i < ramps.length; i++)
+    if (ramps[i].position.x < ramp.position.x - width / 2)
+        ramps[i].remove();
+  }
