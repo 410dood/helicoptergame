@@ -3,6 +3,8 @@ var gif;
 var img;
 var c;
 var createImg;
+var windowWidth;
+var windowHeight;
 function preload() {
     // preload() runs once
     snowboarder2 = loadImage('snowboarder2.gif');
@@ -22,10 +24,7 @@ function windowResized() {
 // }
 
 function draw() {
-    background(250);
-        if (pic2.loaded()) {
-        image(pic2, 50, 50);
-    }
+    background(0);
 }
 
 var player = { x: 150, y: 250, size: 50 };
@@ -37,6 +36,10 @@ var crashed = false;
 var gap = {height: 300, y: 250};
 var walls = [];
 var wallTimer = 0;
+var speed = 9;
+var centerTextH = (windowWidth / 2);
+var centerTextH = (windowHeight / 2);
+
 
 var draw = function() {
     noStroke();
@@ -61,7 +64,7 @@ var drawWalls = function () {
 };
 var moveWalls = function() {
     for (var wall of walls) {
-        wall.x -= 3;
+        wall.x -= speed;
     
      if (wall.x < player.x && wall.x + wall.w > player.x) {
          if (player.y - player.size / 2 < wall.y + wall.h && 
@@ -81,13 +84,13 @@ var moveWalls = function() {
             gap.y = 350;
         };
 
-        var topWall = {x:windowWidth, y:0, w:50, h: gap.y - gap.height / 2};
+        var topWall = {x:windowWidth, y:0, w:150, h: gap.y - gap.height / 2};
         walls.push(topWall);
       //  topWall.mirrorY(-1);
-       var bottomWall = { x: windowWidth, y: gap.y+150, w: 50, h: gap.y - gap.height / 2};
+       var bottomWall = { x: windowWidth, y: gap.y+150, w: 150, h: gap.y - gap.height / 2};
         walls.push(bottomWall);
     }
-    wallTimer -= 3;
+    wallTimer -= speed;
 };
 
 
@@ -96,7 +99,7 @@ var doCoin = function() {
     var filteredCoins = coins.filter((coin) => {return coin.x > 0 && !coin.collected});
     coins = filteredCoins;
     if (random(0,100)< 3) {
-        var newCoin = {x:600, y: random(0, 500), size: 20, collected: false};
+        var newCoin = {x:windowWidth, y: random(0, windowWidth), size: 20, collected: false};
         coins.push(newCoin);
     }
     for (var coin of coins) {
@@ -104,7 +107,7 @@ var doCoin = function() {
         fill(255,255,0);
         ellipse(coin.x, coin.y, coin.size, coin.size);
 
-        coin.x -= 3;
+        coin.x -= speed;
         var playerRadius = player.size/2;
         var coinRadius = coin.size/2;
         var touchDistance = playerRadius + coinRadius;
@@ -139,7 +142,7 @@ var movePlayer = function () {
     }
     player.y += gravity;
 
-if (player.y > 500 || player.y < 0) {
+if (player.y > windowHeight || player.y < 0) {
     crashed = true;
     }
 };
