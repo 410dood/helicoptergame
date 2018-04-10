@@ -5,6 +5,9 @@ var c;
 var createImg;
 var windowWidth;
 var windowHeight;
+var foo
+
+
 function preload() {
     // preload() runs once
     snowboarder2 = loadImage('snowboarder2.gif');
