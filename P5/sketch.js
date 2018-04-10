@@ -1,10 +1,31 @@
 
-function setup() {
-    createCanvas(500, 500);
+var gif; 
+var img;
+var c;
+var createImg;
+function preload() {
+    // preload() runs once
+    snowboarder2 = loadImage('snowboarder2.gif');
+    snowboarder1 = loadImage('snowboarder1.gif');
+    pic2 = loadImage('pic2.jpg');
+
 }
+function setup() {
+    createCanvas(windowWidth, windowHeight);
+    background(255, 0, 200);
+}
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+}
+// function setup() {
+//     createCanvas(500, 500);
+// }
 
 function draw() {
     background(250);
+        if (pic2.loaded()) {
+        image(pic2, 50, 50);
+    }
 }
 
 var player = { x: 150, y: 250, size: 50 };
@@ -13,7 +34,7 @@ var gravity = 0;
 var score = 0;
 var goUp = false;
 var crashed = false;
-var gap = {height: 350, y: 250};
+var gap = {height: 300, y: 250};
 var walls = [];
 var wallTimer = 0;
 
@@ -34,40 +55,42 @@ var draw = function() {
 };
 var drawWalls = function () {
     for (var wall of walls) {
-    fill("green");
+    fill("gray");
     rect(wall.x, wall.y, wall.w, wall.h)
 }
 };
-var moveWalls = function () {
+var moveWalls = function() {
     for (var wall of walls) {
         wall.x -= 3;
     
      if (wall.x < player.x && wall.x + wall.w > player.x) {
-         if (player.y - player.size/2 < wall.y + wall.h && 
-        player.y + player.size/2 > wall.y) {
+         if (player.y - player.size / 2 < wall.y + wall.h && 
+        player.y + player.size / 2 > wall.y) {
         crashed = true;
         }
     }
 }
     if (wallTimer <= 0) {
         wallTimer = 16;
-        gap.y += 25 * floor(random(2.66) - 1);
+        gap.y += 25 * floor(random(3) - 1);
 
-        var newWall = { x: 500, y: 0, w: 50, h: gap.y - gap.height/2 };
-        walls.push(newWall);
-        var newWall = { x: 500, y: gap.y + 100, w: 50, h: gap.y - gap.height/2 };
-        walls.push(newWall);
+        if (gap.y < 150) {
+            gap.y = 150
+        }
+        if (gap.y > 350) {
+            gap.y = 350;
+        };
+
+        var topWall = {x:windowWidth, y:0, w:50, h: gap.y - gap.height / 2};
+        walls.push(topWall);
+      //  topWall.mirrorY(-1);
+       var bottomWall = { x: windowWidth, y: gap.y+150, w: 50, h: gap.y - gap.height / 2};
+        walls.push(bottomWall);
     }
-    wallTimer -= 1;
+    wallTimer -= 3;
 };
 
 
-    if (gap.y < 150) {
-        gap.y = 150
-    }
-    if (gap.y > 350) {
-        gap.y = 350;
-    };
 
 var doCoin = function() {
     var filteredCoins = coins.filter((coin) => {return coin.x > 0 && !coin.collected});
@@ -95,8 +118,12 @@ var doCoin = function() {
 
 
 var drawPlayer = function () {
-    fill(0, 0, 255);
-    ellipse(player.x, player.y, player.size, player.size);
+  // fill(0, 0, 255);
+ //   image(gif, 90, 80);
+  //  ellipse(player.x, player.y, player.size, player.size);
+    image(snowboarder1, player.x, player.y, player.size, player.size);
+   // image(img, 0, height / 2, img.width / 2, img.height / 2);
+
 }
 var movePlayer = function () {
     if (goUp) {
