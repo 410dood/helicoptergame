@@ -54,7 +54,7 @@ a:active, a:hover, #reference a:hover {
 
 #navMenu, #navMenu a {
 font-size:43px; 
-color:rgb(0, 0, 0);
+color:rgb(0, 0, 0) !important;
 }
 
 a.anchor {
