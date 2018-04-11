@@ -3,7 +3,8 @@ body {
   padding: 0px;
   font-family: 'Open Sans', sans-serif;
   font-size:20px;
-  color: #444;
+  color: rgb(0, 0, 0);
+  text-align: center
 }
 
 strong {
@@ -19,7 +20,7 @@ strong {
 }
 
 #container {
-  width: 800px;
+  width: 900px;
   margin: auto;
 }
 
@@ -43,26 +44,26 @@ a:link, a:visited {
 }
 
 a:active, a:hover, #reference a:hover {
-    color:#ED225D;
+    color:rgb(0, 0, 0);
     text-decoration: none;
     padding-bottom: 0.11em;
     border-bottom: 0.11em dashed;
-    border-bottom-color: #ED225D;
+    border-bottom-color: rgb(0, 0, 0);
     transition: border-bottom 30ms linear;
 }
 
 #navMenu, #navMenu a {
-font-size:23px; 
-color: #ED225D;
+font-size:43px; 
+color:rgb(0, 0, 0);
 }
 
 a.anchor {
-    color: #222 !important;
+    color: rgb(77, 57, 150) !important;
     outline: none;
 }
 
 a.anchor:hover {
-    color:#ED225D !important;
+    color:rgb(0, 0, 0) !important;
 }
 
 a.nounderline:hover {
