@@ -8,15 +8,15 @@ var foo;
 var width;
 width = windowWidth;
 height = windowHeight;
-var ramp, snowboarder1, snowboarder2, snowflake
+//var ramp, snowboarder1, snowboarder2, snowflake
 
 function preload() {
     // preload() runs once
     snowboarder2 = loadImage('snowboarder2.gif');
     snowboarder1 = loadImage('snowboarder1.gif');
     snowflake = loadImage('snowflake.png');
-    snow = loadImage('snow.jpg');
-    ramp = loadImage("ramp.png");
+ //   snow = loadImage('snow.jpg');
+//    ramp = loadImage("ramp.png");
 
 }
 function setup() {
@@ -34,7 +34,7 @@ function draw() {
     background(0);
 }
 
-var player = { x: 150, y: 250, size: 50 };
+var player = {x: 150, y: 250, size: 150 };
 var coins = [];
 var gravity = 0;
 var score = 0;
@@ -43,14 +43,14 @@ var crashed = false;
 var gap = {height: 300, y: 250};
 var walls = [];
 var wallTimer = 0;
-var speed = 9;
+var speed = 13;
 var centerTextH = (windowWidth / 2);
 var centerTextH = (windowHeight / 2);
 
 
 
 var draw = function() {
-    noStroke();
+ //   noStroke();
     background(0, 0, 0);
     drawPlayer();
     drawWalls();
@@ -66,9 +66,9 @@ var draw = function() {
 };
 var drawWalls = function () {
     for (var wall of walls) {
-        image(snow, wall.x, wall.y, wall.w, wall.h)
-   // fill("gray");
-   // rect(snow,wall.x, wall.y, wall.w, wall.h)
+       // image(snow, wall.x, wall.y, wall.w, wall.h)
+    fill("gray");
+    rect(wall.x, wall.y, wall.w, wall.h)
 }
 };
 var moveWalls = function() {
@@ -83,8 +83,8 @@ var moveWalls = function() {
     }
 }
     if (wallTimer <= 0) {
-        wallTimer = 16;
-        gap.y += 25 * floor(random(3) - 1);
+        wallTimer = 150;
+        gap.y += 25 * floor(random(2.55) - 1);
 
         if (gap.y < 150) {
             gap.y = 150
@@ -96,8 +96,8 @@ var moveWalls = function() {
         var topWall = {x: windowWidth, y:0, w:150, h: gap.y - gap.height / 2};
         walls.push(topWall);
       //  topWall.mirrorY(-1);
-      // var bottomWall = { x: windowWidth, y:gap.y, w: 150, h: gap.y - gap.height / 2};
-      //  walls.push(bottomWall);
+      var bottomWall = { x: windowWidth, y:gap.y+150, w: 150, h: gap.y - gap.height / 2};
+       walls.push(bottomWall);
     }
     wallTimer -= speed;
 };
@@ -128,10 +128,10 @@ var doCoin = function() {
 
 
 var drawPlayer = function () {
-  // fill(0, 0, 255);
+   fill(0, 0, 255);
  //   image(gif, 90, 80);
-    //ellipse(player.x, player.y, player.size, player.size);
-    image(snowboarder1, player.x-35, player.y-35, windowHeight / 10, windowHeight / 10);
+    ellipse(player.x, player.y, player.size, player.size);
+   // image(snowboarder1, player.x-35, player.y-35, windowHeight / 10, windowHeight / 10);
    // image(img, 0, height / 2, img.width / 2, img.height / 2);
 
 }
