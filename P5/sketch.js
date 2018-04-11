@@ -28,11 +28,19 @@ function preload() {
 // }
 function setup() {
     createCanvas(500, 500);
+    setFrameRate(30);
 }
 
 function draw() {
     background(0);
 }
+
+// function mousePressed() {
+//     if (mouseX > 0 && mouseX < 100 && mouseY > 0 && mouseY < 100) {
+//         var fs = fullscreen();
+//         fullscreen(!fs);
+//     }
+// }
 
 var player = {x: 150, y: 250, size: 40 };
 var coins = [];
@@ -43,9 +51,7 @@ var crashed = false;
 var gap = {height:300, y:250};
 var walls = [];
 var wallTimer = 0;
-var speed = 3;
-var centerTextH = (windowWidth / 2);
-var centerTextH = (windowHeight / 2);
+var speed = 6;
 
 var draw = function() {
  //   noStroke();
@@ -58,7 +64,7 @@ var draw = function() {
         movePlayer();
         doCoin();
         moveWalls();
-    } else { 
+    }   else { 
         youLoseScreen();
         }
     if (score >= 10) {
@@ -70,39 +76,38 @@ var drawWalls = function () {
        image(snow, wall.x, wall.y, wall.w, wall.h)
     //fill("gray");
     //rect(wall.x, wall.y, wall.w, wall.h)
-}
+    }
 };
 var moveWalls = function() {
     for (var wall of walls) {
         wall.x -= speed;
     
-     if (wall.x < player.x && wall.x + wall.w > player.x) {
-         if (player.y - player.size / 2 < wall.y + wall.h && 
-        player.y + player.size / 2 > wall.y) {
-        crashed = true;
+        if (wall.x < player.x && wall.x + wall.w > player.x) {
+            if (player.y - player.size / 2 < wall.y + wall.h && 
+            player.y + player.size / 2 > wall.y) {
+            crashed = true;
+            }
         }
     }
-}
-    if (wallTimer <= 0) {
-        wallTimer = 40;
-        gap.y += 25 * floor(random(3) - 1);
-
+        if (wallTimer <= 0) {
+            wallTimer = 196;
+            gap.y += 25 * floor(random(2.95) - 1);
+        }
         if (gap.y < 150) {
             gap.y = 150
         }
         if (gap.y > 350) {
             gap.y = 350;
-        };
+        }
      //   topWall.mirrorY 
   //      x: 500, y: 300, w: 50, h: gap.y + gap.height / 2
-        var topWall = {x: 500, y:0, w:50, h: gap.y - gap.height/2};
-        walls.push(topWall);
-        var bottomWall = { x: 500, y: gap.y, w: 50, h: 500};
-       walls.push(bottomWall);
-    }
+    var topWall = {x: 500, y:0, w:50, h: gap.y - gap.height/2};
+    walls.push(topWall);
+    var bottomWall = {x: 500, y: gap.y, w: 50, h: 500};
+    walls.push(bottomWall);
+    
     wallTimer -= speed;
-};
-
+    }
 var doCoin = function() {
     var filteredCoins = coins.filter((coin) => {return coin.x > 0 && !coin.collected});
     coins = filteredCoins;
@@ -155,7 +160,7 @@ if (player.y > 500 || player.y < 0) {
     }
 };
 var mousePressed = function() {
-    if (mouseButton === LEFT) {
+    if (mouseButton === LEFT)  {
         goUp = true;
         if (crashed) {
             crashed = false;
