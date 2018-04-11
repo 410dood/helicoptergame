@@ -11,6 +11,9 @@ strong {
   font-weight:600;
   
 }
+canvasGame {
+    text-align: center;
+}
 
 #bgCanvas {
   position: absolute;

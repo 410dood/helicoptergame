@@ -8,7 +8,7 @@ var foo;
 var width;
 width = windowWidth;
 height = windowHeight;
-//var ramp, snowboarder1, snowboarder2, snowflake
+//var floor, snowboarder1, snowboarder2, snowflake
 
 function preload() {
     // preload() runs once
@@ -16,7 +16,8 @@ function preload() {
     snowboarder1 = loadImage('snowboarder1.gif');
     snowflake = loadImage('snowflake.png');
     snow = loadImage('snow.jpg');
-//    ramp = loadImage("ramp.png");
+    bg = loadImage('snowbg.jpg');
+    snowDrift = loadImage('snowdrift.png');
 
 }
 // function setup() {
@@ -27,7 +28,7 @@ function preload() {
 //     resizeCanvas(windowWidth, windowHeight);
 // }
 function setup() {
-    createCanvas(500, 500);
+var canvasGame = createCanvas(500, 500);
     setFrameRate(30);
 }
 
@@ -42,7 +43,7 @@ function draw() {
 //     }
 // }
 
-var player = {x: 150, y: 250, size: 40 };
+var player = {x: 150, y: 250, size: 50 };
 var coins = [];
 var gravity = 0;
 var score = 0;
@@ -55,7 +56,8 @@ var speed = 6;
 
 var draw = function() {
  //   noStroke();
-    background(0, 0, 0);
+    background(bg, );
+   // background(168, 255, 255);
     drawPlayer();
     drawWalls();
     drawScore();
@@ -67,20 +69,20 @@ var draw = function() {
     }   else { 
         youLoseScreen();
         }
-    if (score >= 10) {
+    if (score >= 40) {
     youWinScreen();
     }
 };
 var drawWalls = function () {
     for (var wall of walls) {
-       image(snow, wall.x, wall.y, wall.w, wall.h)
-    //fill("gray");
-    //rect(wall.x, wall.y, wall.w, wall.h)
+    image(snowDrift, wall.x, wall.y, wall.w, wall.h)
+   // fill("gray");
+ // rect(wall.x, wall.y, wall.w, wall.h)
     }
 };
 var moveWalls = function() {
     for (var wall of walls) {
-        wall.x -= speed;
+        wall.x -= 3;
     
         if (wall.x < player.x && wall.x + wall.w > player.x) {
             if (player.y - player.size / 2 < wall.y + wall.h && 
@@ -90,9 +92,9 @@ var moveWalls = function() {
         }
     }
         if (wallTimer <= 0) {
-            wallTimer = 196;
-            gap.y += 25 * floor(random(2.95) - 1);
-        }
+            wallTimer = 16;
+            gap.y += 25 * floor(random(3) - 1);
+        
         if (gap.y < 150) {
             gap.y = 150
         }
@@ -103,16 +105,16 @@ var moveWalls = function() {
   //      x: 500, y: 300, w: 50, h: gap.y + gap.height / 2
     var topWall = {x: 500, y:0, w:50, h: gap.y - gap.height/2};
     walls.push(topWall);
-    var bottomWall = {x: 500, y: gap.y, w: 50, h: 500};
+    var bottomWall = {x: 500, y: gap.y, w:50, h: 500};
     walls.push(bottomWall);
-    
-    wallTimer -= speed;
     }
+    wallTimer -= 1;
+    };
 var doCoin = function() {
     var filteredCoins = coins.filter((coin) => {return coin.x > 0 && !coin.collected});
     coins = filteredCoins;
-    if (random(0,100)< 50) {
-        var newCoin = {x:500, y: random(0, 500), size: 20, collected: false};
+    if (random(0,100)< 40) {
+        var newCoin = {x:500, y: random(0, 500), size: 30, collected: false};
         coins.push(newCoin);
     }
     for (var coin of coins) {
@@ -120,7 +122,7 @@ var doCoin = function() {
      //   fill(255,255,0);
      //   ellipse(coin.x, coin.y, coin.size, coin.size);
 
-        coin.x -= speed;
+        coin.x -= 4;
         var playerRadius = player.size/2;
         var coinRadius = coin.size/2;
         var touchDistance = playerRadius + coinRadius;
@@ -136,8 +138,8 @@ var doCoin = function() {
 var drawPlayer = function () {
    fill(0, 0, 255);
  //   image(gif, 90, 80);
-    ellipse(player.x, player.y, player.size, player.size);
-   // image(snowboarder1, player.x-35, player.y-35, windowHeight / 10, windowHeight / 10);
+   // ellipse(player.x, player.y, player.size, player.size);
+   image(snowboarder1, player.x-25, player.y-31, player.size, player.size);
    // image(img, 0, height / 2, img.width / 2, img.height / 2);
 
 }
@@ -181,7 +183,7 @@ var youLoseScreen = function() {
     fill(255); 
     textSize(24);
     text("Game Over", 200, 200);
-    text("Click to Restart", 100, 350);
+    text("Click to Restart", 175, 300);
 };
 var drawScore = function() {
     fill(255, 255, 0);
