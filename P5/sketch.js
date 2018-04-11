@@ -43,7 +43,7 @@ function draw() {
 //     }
 // }
 
-var player = {x: 150, y: 250, size: 50 };
+var player = {x: 150, y: 250, size: 40 };
 var coins = [];
 var gravity = 0;
 var score = 0;
@@ -52,7 +52,7 @@ var crashed = false;
 var gap = {height:300, y:250};
 var walls = [];
 var wallTimer = 0;
-var speed = 6;
+var speed = 4;
 
 var draw = function() {
  //   noStroke();
@@ -69,7 +69,7 @@ var draw = function() {
     }   else { 
         youLoseScreen();
         }
-    if (score >= 40) {
+    if (score >= 25) {
     youWinScreen();
     }
 };
@@ -77,7 +77,7 @@ var drawWalls = function () {
     for (var wall of walls) {
     image(snowDrift, wall.x, wall.y, wall.w, wall.h)
    // fill("gray");
- // rect(wall.x, wall.y, wall.w, wall.h)
+  //rect(wall.x, wall.y, wall.w, wall.h)
     }
 };
 var moveWalls = function() {
@@ -192,6 +192,6 @@ var drawScore = function() {
 };
 var youWinScreen = function () {
     fill(255);
-    textSize(24);
-    text("You Win", 200, 200);
+    textSize(34);
+    text("You Win", 200, 250);
 };
