@@ -46,8 +46,7 @@ var wallTimer = 0;
 var speed = 9;
 var centerTextH = (windowWidth / 2);
 var centerTextH = (windowHeight / 2);
-ramp.position.x = windowWidth / 2;
-ramp.position.y = windowWidth / 2;
+
 
 
 var draw = function() {
@@ -183,29 +182,3 @@ var drawScore = function() {
     textSize(24);
     text(score, 50, windowHeight * 0.9);
 };
-function draw() {
-    ramps = new Group();
-
-
-//spawn ramps
-if (frameCount % 60 == 0) {
-    var rampH = random(50, 300);
-    var ramp = createSprite(ramp.position.x + width, GROUND_Y - rampH / 2 + 1 + 100, 80, rampH);
-    ramp.addImage(ramp);
-    ramps.add(ramp);
-
-    //top ramp
-    if (rampH < 200) {
-        rampH = height - (height - GROUND_Y) - (rampH + MIN_OPENING);
-        ramp = createSprite(ramp.position.x + width, rampH / 2 - 100, 80, rampH);
-        ramp.mirrorY(-1);
-        ramp.addImage(rampImg);
-        ramps.add(ramp);
-    }
-}
-
-//get rid of passed ramps
-for (var i = 0; i < ramps.length; i++)
-    if (ramps[i].position.x < ramp.position.x - width / 2)
-        ramps[i].remove();
-  }
